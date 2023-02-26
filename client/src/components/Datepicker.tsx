@@ -2,27 +2,22 @@ import { useState } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-
 interface DatepickerProps {
-  selectedDate: Date;
   onDateChange: (date: Date) => void;
 }
 
-const Datepicker: React.FC<DatepickerProps> = ({ selectedDate, onDateChange }) => {
-  const [startDate, setStartDate] = useState<Date | null>(selectedDate);
+const Datepicker: React.FC<DatepickerProps> = ({ onDateChange }) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  const handleDateChange = (date: Date | null) => {
-    setStartDate(date);
-    if (date) {
-      onDateChange(date);
-    }
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+    onDateChange(date);
   };
 
   return (
     <DatePicker
-      selected={startDate}
+      selected={selectedDate}
       onChange={handleDateChange}
-
     />
   );
 };
