@@ -162,7 +162,7 @@
 
 .label {
   margin-bottom: 1rem;
-}
+} 
 
 #body {
   width: '100%';
@@ -176,12 +176,12 @@
   margin-bottom: 1rem;
   border-radius: 0.25rem;
   border: 1px solid #ccc;
-  width: 100%;
   max-width: 30rem;
 }
 
+
 .textarea {
-  height: 10rem;
+  width: 40vw;
 }
 
 /* Enable hover only on non-touch devices */
