@@ -29,11 +29,16 @@ const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
       const options = {
         interaction: {
           dragNodes: true,
-          dragView: true,
+          dragView: false,
           zoomView: true,
         },
         physics: {
           enabled: true,
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: {
+            springConstant: 0.08,
+            springLength: 100,
+          },
         },
       };
 
