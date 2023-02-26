@@ -1,3 +1,8 @@
-// Axios
-// POST request to /user/user_2MFXmmQvAZgLxerQ9alstC9RdCm/journal with entry
-// Include header with Bearer token with value from env
+import { api } from "./axios";
+
+export async function sendJournalEntry(user:User, journal:Journal) {
+    let response = await api.post(`/user/${user.userId}/journal`, {
+        entry: journal.entry, date: journal.date
+    })
+    return response.data
+}

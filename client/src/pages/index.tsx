@@ -5,10 +5,12 @@ import { useState, FormEvent } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import Datepicker from '../components/Datepicker';
 import ValidatorContainer from '@/components/ValidatorContainer';
+import { sendJournalEntry } from '@/services/JournalService';
 
 function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date: Date) => void }) {
   const [body, setBody] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const { userId, sessionId } = useAuth();
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -16,9 +18,10 @@ function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date:
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await onFormSubmit(body, selectedDate);
-    setBody('');
+    const response = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate});
+    setBody(''); 
     setSelectedDate(new Date());
+    console.log(response)
   };
 
   return (
