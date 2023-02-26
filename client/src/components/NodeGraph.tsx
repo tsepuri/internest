@@ -14,9 +14,10 @@ type Edge = {
 type Props = {
   nodes?: Node[];
   edges?: Edge[];
+  onNodeDoubleClick?: (nodeId: number) => void;
 };
 
-const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
+const NodeGraph = ({ nodes = [], edges = [], onNodeDoubleClick }: Props) => {
   useEffect(() => {
     const container = document.getElementById('network-container');
 
@@ -52,8 +53,17 @@ const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
 
       const network = new vis.Network(container, data, options);
       network.fit();
+
+      if (onNodeDoubleClick) {
+        network.on('doubleClick', (params) => {
+          const node = nodes.find((node) => node.id === params.nodes[0]);
+          if (node) {
+            onNodeDoubleClick(node.id);
+          }
+        });
+      }
     }
-  }, [nodes, edges]);
+  }, [nodes, edges, onNodeDoubleClick]);
 
   return (
     <div
