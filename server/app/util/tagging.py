@@ -38,6 +38,9 @@ class Tagging:
         print(db_request)
         return db_request
 
+    def word_vectors(self, keywords):
+        pass
+
     def _similarity(self, word1, word2):
         #spacy
         pass

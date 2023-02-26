@@ -32,25 +32,6 @@ class User(TimestampedModel):
             }
         }
 
-
-Keyword = ForwardRef('Keyword')
-
-class Keyword(TimestampedModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    user: User
-    name: str
-    parent: Keyword = None
-    children: List[Keyword] = Field(default_factory=list)
-
-    schema_extra = {
-        "exampleKeyword": {
-            "name": "restaurant",
-            "parent": "place",
-            "children": ["Chipolet", "BIBIBOP"]
-        }
-    }
-
-
 class Journal(TimestampedModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user: User
@@ -68,3 +49,26 @@ class Journal(TimestampedModel):
                 ObjectId: str
             }
         }
+        
+Keyword = ForwardRef('Keyword')
+
+class Keyword(TimestampedModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    user: User
+    name: str
+    parent: Keyword = None
+    journals: List[Journal] = Field(default_factory=list)
+    children: List[Keyword] = Field(default_factory=list)
+
+    schema_extra = {
+        "exampleKeyword": {
+            "name": "restaurant",
+            "frequency": 2,
+            "parent": "place",
+            "journals": ["4309320"],
+            "children": ["Chipotle", "BIBIBOP"]
+        }
+    }
+
+
+
