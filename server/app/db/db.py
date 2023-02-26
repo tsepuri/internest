@@ -35,6 +35,14 @@ class DB():
         await self.db.User.insert_one({'name': userObj.name, 'email': userObj.email, 'clerk_user_id': user_id})
         return (await self.db.User.find({"clerk_user_id": user_id}).to_list(length=1))[0]
 
+    async def get_keyword_related_journals(self, user_id:str, keyword:str):
+        user = await self.get_or_create_user(user_id)
+        journals = await self.db.Keyword.find_all(
+            {'user':user, 'name':keyword},
+            {'journals': 1}
+        )
+        return journals
+
     async def insert_keyword(self, user_id:str, name:str, journal:Journal=None, parent:Keyword=None):
         user = await self.get_or_create_user(user_id)
         keywordObj = await self.db.Keyword.find({"user": user, "name": name}).limit(1)

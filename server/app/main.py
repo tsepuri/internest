@@ -1,8 +1,9 @@
 import uvicorn
 from fastapi import Depends, FastAPI
 
-from app.schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
-from app.util.tagging import tag
+from db.db import DB
+from schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
+from util.tagging import tag
 from es_client import get_es_client
 from routers import clerk, user
 from fastapi.middleware.cors import CORSMiddleware
@@ -81,6 +82,12 @@ async def register_validated_keywords(request: RegisterValidatedKeywordsRequest)
         "graph" : graph,
         "frequency" : frequency
     }
+
+@app.get("/{user_id}/{keyword}")
+async def get_keyword_related_documents(user_id:str, keyword:str):
+    db = DB()
+    journals = await db.get_keyword_related_journals(user_id, keyword)
+    return journals
 
 @app.post("/keyword")
 async def create_keyword_docs_in_es():
