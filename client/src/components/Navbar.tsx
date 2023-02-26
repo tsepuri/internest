@@ -15,7 +15,7 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li className={styles.li}>
-                    <Link href="/graph2" className={styles.a}>
+                    <Link href="/graph" className={styles.a}>
                         Graph
                     </Link>
                 </li>

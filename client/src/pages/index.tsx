@@ -3,19 +3,26 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { useState, FormEvent } from 'react';
 import { SignOutButton, UserButton, UserProfile, useAuth } from '@clerk/nextjs'
+import Datepicker from '../components/Datepicker';
 
 
 function JournalEntryForm() {
   const [body, setBody] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch('/api/journal-entries', {
       method: 'POST',
-      body: JSON.stringify({ body }),
+      body: JSON.stringify({ body, date: selectedDate.toISOString() }),
     });
     if (response.ok) {
       setBody('');
+      setSelectedDate(new Date());
       // Optionally, redirect to a page that shows the newly created journal entry
     }
   };
@@ -23,7 +30,11 @@ function JournalEntryForm() {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.inputWrapper}>
-        <label htmlFor={styles.body}>TODO: TODAYS DATE:</label><br />
+        <div>
+          <label htmlFor={styles.body}>Date Selected:</label><br />
+          <Datepicker onDateChange={handleDateChange} />
+        </div>
+
         <textarea
           id={styles.body}
           value={body}
@@ -54,8 +65,8 @@ export default function Home() {
         <Navbar />
 
         <div className={styles.formWrapper}>
-            <JournalEntryForm />
-          </div>
+          <JournalEntryForm />
+        </div>
       </main>
     </>
   )
