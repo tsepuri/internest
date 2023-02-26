@@ -1,7 +1,6 @@
 import NodeGraph from '../components/NodeGraph';
 import Head from 'next/head'
 import styles from '@/styles/Graph.module.css'
-import { UserButton } from '@clerk/nextjs'
 import Navbar from '../components/Navbar';
 
 
@@ -38,7 +37,6 @@ const HomePage = () => {
             </Head>
             <main className={styles.main}>
                 <Navbar />
-                <UserButton/>
                 <NodeGraph nodes={nodes} edges={edges} />
             </main>
         </>

@@ -1,4 +1,4 @@
-import { UserButton } from '@clerk/nextjs'
+import Navbar from '../components/Navbar';
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { useState, FormEvent } from 'react';
@@ -45,7 +45,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <UserButton/>
+        <Navbar />
 
         <div className={styles.formWrapper}>
             <JournalEntryForm />
