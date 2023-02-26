@@ -77,9 +77,9 @@ const NodeGraph = ({ nodes = [], edges = [], onNodeDoubleClick }: Props) => {
       <div
         id="network-container"
         style={{
-          height: '75vh',
-          width: '75vw',
-          border: '5px solid black',
+          height: '80vh',
+          width: '80vw',
+          border: '2px solid black',
           overflow: 'hidden',
         }}
       />

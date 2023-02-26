@@ -3,14 +3,14 @@
     display: flex;
     flex-direction: row;
     width: 50%;
-
   }
   
   .button {
     background-color: #283618;
     color: #fff;
-    padding: 1%;
-    border-radius: 3%;
+    padding: 3% 6%;
+    border-radius: 45%;
+    border-width: 0px;
     cursor: pointer;
     margin-right: 2%;
     margin-top:1%
@@ -18,6 +18,8 @@
   
   .button:hover {
     background-color: #606C38;
+    transition: ease;
+    transition-duration: 1s;
   }
   
   .active {

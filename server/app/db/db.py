@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 import motor.motor_asyncio
 
-from app.routers.clerk import getUser
-from app.db.models import Keyword, User, Journal
+from routers.clerk import getUser
+from db.models import Keyword, User, Journal
 
 load_dotenv()
 
@@ -20,7 +20,7 @@ class DB():
             'user': user,
             'content': entry,
         })
-        return result.inserted_id
+        return repr(result.inserted_id)
 
     async def get_or_create_user(self, user_id: str) -> User:
         user = await self.db.User.find({"clerk_user_id": user_id}).to_list(length=1)
