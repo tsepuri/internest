@@ -1,9 +1,11 @@
 import datetime
 import os
-import asyncio
+
 from dotenv import load_dotenv
 import motor.motor_asyncio
-from routers.clerk import getUser
+
+from app.routers.clerk import getUser
+from app.db.models import Keyword, User, Journal
 
 load_dotenv()
 
@@ -12,36 +14,68 @@ class DB():
         self.client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGODB_URL"))
         self.db = self.client['db']
 
-    async def insert_journal_entry(self, user_id=str, entry=str):
-        existingUser = await self.user(user_id)
-        result = await self.db.Journal.insert_one({'user': existingUser, 'content': entry})
-        journals = await self.db.Journal.find().to_list(length=2)
-        breakpoint()
-        print(f"result: {repr(result.inserted_id)}")
+    async def insert_journal_entry(self, user_id=str, entry=str) -> str:
+        user = await self.get_or_create_user(user_id)
+        result = await self.db.Journal.insert_one({
+            'user': user,
+            'content': entry,
+        })
         return result.inserted_id
 
-    async def user(self, user_id: str):
-        existingUser = await self.db.User.find({"clerk_user_id": user_id}).to_list(length=1)
-        if len(existingUser) == 0:
-            existingUser = await self.create_user(user_id)
+    async def get_or_create_user(self, user_id: str) -> User:
+        user = await self.db.User.find({"clerk_user_id": user_id}).to_list(length=1)
+        if len(user) == 0:
+            user = await self.create_user(user_id)
         else:
-            existingUser = existingUser[0]
-        return existingUser
-
-    async def insert_keyword(self, user_id=str, keyword=str, parent=None):
-        existingUser = await self.user(user_id)
-        result = await self.db.Keyword()
-    
-    async def update_keyword(self, user_id=str, keyword=str, parent=None):
-        pass
-    
-    async def get_graph(self, user_id=str, time_threshold=datetime):
-        pass
+            user = user[0]
+        return user
 
     async def create_user(self, user_id:str):
         userObj = await getUser(user_id)
         await self.db.User.insert_one({'name': userObj.name, 'email': userObj.email, 'clerk_user_id': user_id})
         return (await self.db.User.find({"clerk_user_id": user_id}).to_list(length=1))[0]
+
+    async def insert_keyword(self, user_id:str, name:str, journal:Journal=None, parent:Keyword=None):
+        user = await self.get_or_create_user(user_id)
+        keywordObj = await self.db.Keyword.find({"user": user, "name": name}).limit(1)
+        if len(keywordObj) == 0:
+            result = await self.create_keyword(user, name, journal, parent)
+            if parent is not None:
+                parent.children.append(keywordObj)
+                await self.update_keyword(parent)
+        else:
+            keywordObj.frequency += 1
+            keywordObj.journals.append(journal)
+            result = await self.update_keyword(keywordObj)
+        return result
+
+    async def create_keyword(self, user:User, name:str, journal:Journal, parent:Keyword=None) -> str:
+        result = await self.db.User.insert_one({
+            'user': user,
+            'name': name,
+            'frequency': 1,
+            'parent': parent,
+            'journals': [journal]
+        })
+        return result.inserted_id
+    
+    async def update_keyword(self, keywordObj: Keyword):
+        result = await self.db.Keyword.replace_one(
+            {'_id': keywordObj.id}, # filter for get origin one
+            {
+                'frequency': keywordObj.frequency,
+                'journals': keywordObj.journals,
+                'children': keywordObj.children,
+            }
+        )
+        return result.updated_id
+
+    
+    async def get_graph(self, user_id=str, time_threshold=datetime):
+        result = await self.db.User.find({'_id': user_id})
+        # we have to join graph column with time filter
+        return result['graph']
+
 
         
     

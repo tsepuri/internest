@@ -44,7 +44,7 @@ class User(TimestampedModel):
             "exampleUser": {
                 "name": "Simba",
                 "email": "simba@example.com",
-                "graphMap": ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5"]
+                "graph": ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5"]
             }
         }
 
@@ -74,8 +74,8 @@ class Keyword(TimestampedModel):
     name: str
     frequency: int
     parent: Keyword = None
-    journals: List[Journal] = Field(default_factory=list)
     children: List[Keyword] = Field(default_factory=list)
+    journals: List[Journal] = Field(default_factory=list)
 
     schema_extra = {
         "exampleKeyword": {

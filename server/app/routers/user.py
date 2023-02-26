@@ -19,6 +19,9 @@ async def create_user_journal(user_id: str, entry: Entry):
     """
     db = DB()
     objID = await db.insert_journal_entry(user_id, entry.entry)
+    # extract keywords
+    # ask es server keyword
+    ## if score is too low, we can ask ai to categorize
     return {"objectID": objID}
 
 # expected values for time threshold are 1d, 1w or 1m
