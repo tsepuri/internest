@@ -3,6 +3,7 @@
   flex-direction: column;
   padding: 3rem;
   min-height: 100vh;
+  background-color:#FEFAE0;
 }
 
 .formWrapper {
