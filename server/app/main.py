@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi import Depends, FastAPI
 
-from .dependencies import get_token_header
-from .routers import clerk, user
+from dependencies import get_token_header
+from routers import clerk, user
 
 app = FastAPI(dependencies=[Depends(get_token_header)])
 
