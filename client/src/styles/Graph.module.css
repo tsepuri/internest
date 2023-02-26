@@ -1,0 +1,11 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    min-height: 100vh;
+  }
+
+
+  #node-graph {
+    width: 90vw;
+  }
