@@ -4,6 +4,7 @@ import styles from '@/styles/Home.module.css'
 import { useState, FormEvent } from 'react';
 import { SignOutButton, UserButton, UserProfile, useAuth } from '@clerk/nextjs'
 import Datepicker from '../components/Datepicker';
+import ValidatorContainer from '@/components/ValidatorContainer';
 
 
 function JournalEntryForm() {
@@ -66,6 +67,31 @@ export default function Home() {
 
         <div className={styles.formWrapper}>
           <JournalEntryForm />
+          <ValidatorContainer
+  initialWords={[
+    "apple",
+    "banana",
+    "cherry",
+    "date",
+    "elderberry",
+    "fig",
+    "grape",
+    "honeydew",
+    "kiwi",
+    "lemon",
+    "mango",
+    "nectarine",
+    "orange",
+    "pineapple",
+    "quince",
+    "raspberry",
+    "strawberry",
+    "tangerine",
+    "ugli fruit",
+    "watermelon",
+  ]}
+/>
+
         </div>
       </main>
     </>
