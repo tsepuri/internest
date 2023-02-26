@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { useState, FormEvent } from 'react';
 import { SignOutButton, UserButton, UserProfile, useAuth } from '@clerk/nextjs'
+import DatePicker from '../components/Datepicker';
 
 
 function JournalEntryForm() {
@@ -23,7 +24,11 @@ function JournalEntryForm() {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.inputWrapper}>
-        <label htmlFor={styles.body}>TODO: TODAYS DATE:</label><br />
+        <div>
+        <label htmlFor={styles.body}>TODO: TODAYS DATE:</label><br /> 
+        <DatePicker />
+        </div>
+        
         <textarea
           id={styles.body}
           value={body}
