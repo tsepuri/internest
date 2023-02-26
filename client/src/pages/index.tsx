@@ -1,13 +1,12 @@
 import Navbar from '../components/Navbar';
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
+import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
 import { useState, FormEvent } from 'react';
-import { SignOutButton, UserButton, UserProfile, useAuth } from '@clerk/nextjs'
+import { useAuth } from '@clerk/nextjs';
 import Datepicker from '../components/Datepicker';
 import ValidatorContainer from '@/components/ValidatorContainer';
 
-
-function JournalEntryForm() {
+function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date: Date) => void }) {
   const [body, setBody] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -17,15 +16,9 @@ function JournalEntryForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch('/api/journal-entries', {
-      method: 'POST',
-      body: JSON.stringify({ body, date: selectedDate.toISOString() }),
-    });
-    if (response.ok) {
-      setBody('');
-      setSelectedDate(new Date());
-      // Optionally, redirect to a page that shows the newly created journal entry
-    }
+    await onFormSubmit(body, selectedDate);
+    setBody('');
+    setSelectedDate(new Date());
   };
 
   return (
@@ -55,6 +48,18 @@ export default function Home() {
     console.log(res)
   }
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [showValidator, setShowValidator] = useState(false);
+
+  const handleFormSubmit = async (body: string, date: Date) => {
+    const response = await fetch('/api/journal-entries', {
+      method: 'POST',
+      body: JSON.stringify({ body, date: date.toISOString() }),
+    });
+    if (response.ok) {
+      setShowValidator(true);
+    }
+  };
+
   return (
     <>
       <Head>        
@@ -68,32 +73,33 @@ export default function Home() {
         <Navbar />
 
         <div className={styles.formWrapper}>
-          <JournalEntryForm />
-          <ValidatorContainer
-  initialWords={[
-    "apple",
-    "banana",
-    "cherry",
-    "date",
-    "elderberry",
-    "fig",
-    "grape",
-    "honeydew",
-    "kiwi",
-    "lemon",
-    "mango",
-    "nectarine",
-    "orange",
-    "pineapple",
-    "quince",
-    "raspberry",
-    "strawberry",
-    "tangerine",
-    "ugli fruit",
-    "watermelon",
-  ]}
-/>
-
+          <JournalEntryForm onFormSubmit={handleFormSubmit} />
+          {showValidator && (
+            <ValidatorContainer
+              initialWords={[
+                "apple",
+                "banana",
+                "cherry",
+                "date",
+                "elderberry",
+                "fig",
+                "grape",
+                "honeydew",
+                "kiwi",
+                "lemon",
+                "mango",
+                "nectarine",
+                "orange",
+                "pineapple",
+                "quince",
+                "raspberry",
+                "strawberry",
+                "tangerine",
+                "ugli fruit",
+                "watermelon",
+              ]}
+            />
+          )}
         </div>
       </main>
     </>
