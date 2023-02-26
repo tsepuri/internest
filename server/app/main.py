@@ -87,6 +87,12 @@ async def register_validated_keywords(request: RegisterValidatedKeywordsRequest)
         "frequency" : frequency
     }
 
+@app.get("/{user_id}/{keyword}")
+async def get_keyword_related_documents(user_id:str, keyword:str):
+    db = DB()
+    journals = await db.get_keyword_related_journals(user_id, keyword)
+    return journals
+
 @app.post("/keyword")
 async def create_keyword_docs_in_es():
     """
