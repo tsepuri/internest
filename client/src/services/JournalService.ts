@@ -9,3 +9,10 @@ export async function sendJournalEntry(user:User, journal:Journal, sessionToken:
     })
     return response.data
 }
+
+export async function sendKeywords(user:User, keywords:string[], sessionToken:string) {
+    let response = await api.post('/validated-keywords', {
+        keywords, userId: user.userId, session: makeSessionInfo(sessionToken)
+    })
+    return response.data
+}

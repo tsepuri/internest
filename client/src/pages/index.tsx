@@ -1,13 +1,15 @@
 import Navbar from '../components/Navbar';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import styles from '@/styles/Home.module.css';
 import { useState, FormEvent } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import Datepicker from '../components/Datepicker';
 import ValidatorContainer from '@/components/ValidatorContainer';
-import { sendJournalEntry } from '@/services/JournalService';
+import { sendJournalEntry, sendKeywords } from '@/services/JournalService';
+import { JournalResponse } from '@/types/Journal';
 
-function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date: Date) => void }) {
+function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (keywords: string[]) => void }) {
   const [body, setBody] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { userId, sessionId } = useAuth();
@@ -18,10 +20,15 @@ function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date:
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate}, sessionId as string);
+    const response:JournalResponse = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate}, sessionId as string);
     setBody(''); 
     setSelectedDate(new Date());
-    console.log(response)
+    if (response.keywords) {
+      onFormSubmit(response.keywords)
+    }
+    else {
+      onFormSubmit(["Pizza", "Food", "Ice Cream"])
+    }
   };
 
   return (
@@ -46,22 +53,24 @@ function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date:
 }
 
 export default function Home() {
+  const router = useRouter();
   const apiCall = async () => {
     let res = await fetch("/api/hello")
     console.log(res)
   }
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { userId, sessionId } = useAuth();
+  const [keywords, setKeywords] = useState([""])
   const [showValidator, setShowValidator] = useState(false);
 
-  const handleFormSubmit = async (body: string, date: Date) => {
-    const response = await fetch('/api/journal-entries', {
-      method: 'POST',
-      body: JSON.stringify({ body, date: date.toISOString() }),
-    });
-    if (response.ok) {
-      setShowValidator(true);
-    }
+  const handleFormSubmit = (inputKeywords:string[]) => {
+      setShowValidator(true)
+      setKeywords(inputKeywords)
   };
+
+  const submitValidated = async (keywords:string[]) => {
+    const response = await sendKeywords({userId: userId as string}, keywords, sessionId as string);
+    router.push('/graph');
+  }
 
   return (
     <>
@@ -79,28 +88,8 @@ export default function Home() {
           <JournalEntryForm onFormSubmit={handleFormSubmit} />
           {showValidator && (
             <ValidatorContainer
-              initialWords={[
-                "apple",
-                "banana",
-                "cherry",
-                "date",
-                "elderberry",
-                "fig",
-                "grape",
-                "honeydew",
-                "kiwi",
-                "lemon",
-                "mango",
-                "nectarine",
-                "orange",
-                "pineapple",
-                "quince",
-                "raspberry",
-                "strawberry",
-                "tangerine",
-                "ugli fruit",
-                "watermelon",
-              ]}
+              onSubmit={submitValidated}
+              initialWords={keywords}
             />
           )}
         </div>

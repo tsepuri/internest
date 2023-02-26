@@ -19,8 +19,8 @@
 
 .wordCircle:hover .wordText {
   color: red;
-  transition-duration: 0.8s;
-  transition: ease;
+  transition-duration: 1s;
+  transition: ease-in;
 }
 
 .wordOverlay {
@@ -33,12 +33,6 @@
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-}
-
-.wordCircle:hover .wordOverlay {
-  opacity: 1;
-  transition-duration: 0.8s;
-  transition: ease;
 }
 
 .wordText {

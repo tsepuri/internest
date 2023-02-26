@@ -4,8 +4,10 @@ import styles from '@/styles/Graph.module.css';
 import Navbar from '../components/Navbar';
 import Button from '../components/Button';
 import JournalModal from '../components/JournalModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GraphResponse } from '@/types/GraphType';
+import { getGraph } from '@/services/GraphService';
+import { useAuth } from '@clerk/nextjs';
 
 type Node = {
   id: number;
@@ -18,10 +20,21 @@ type Edge = {
 };
 
 const Graph = () => {
+    const [graphResponse, setGraphResponse] = useState<GraphResponse>()
+    const { userId, sessionId } = useAuth();
+
+    useEffect(() => {
+        const fetchGraph = async () => {
+            const data = await getGraph({userId: userId as string}, sessionId as string)
+            setGraphResponse(data)
+          }
+      }, [])
+/*
   let graphResponse:GraphResponse = {
     graph: [{"keyword1": {"keyword2": ["keyword3", "keyword4"]}, "keyword5": {}}],
     frequency: {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
   }
+  */
   const nodes: Node[] = [
     { id: 1, label: 'User' },
     { id: 2, label: 'People' },
@@ -40,7 +53,7 @@ const Graph = () => {
   ];
 
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
-
+  
   const handleNodeDoubleClick = (nodeId: number) => {
     setSelectedNodeId(nodeId);
   };
