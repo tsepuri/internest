@@ -26,13 +26,42 @@ const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
         edges: edges.map((edge) => ({ from: edge.from, to: edge.to })),
       };
 
-      const options = {};
+      const options = {
+        interaction: {
+          dragNodes: true,
+          dragView: true,
+          zoomView: true,
+        },
+        physics: {
+          enabled: true,
+        },
+      };
 
       const network = new vis.Network(container, data, options);
+      network.fit();
     }
   }, [nodes, edges]);
 
-  return <div id="network-container" style={{ height: '90vw' }} />;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <div
+        id="network-container"
+        style={{
+          height: '75vh',
+          width: '75vw',
+          border: '5px solid black',
+          overflow: 'hidden',
+        }}
+      />
+    </div>
+  );
 };
 
 export default NodeGraph;

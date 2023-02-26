@@ -6,17 +6,26 @@ import { UserButton } from '@clerk/nextjs'
 
 const HomePage = () => {
     const nodes = [
-        { id: 1, label: 'Node 1' },
-        { id: 2, label: 'Node 2' },
-        { id: 3, label: 'Node 3' },
+        { id: 1, label: 'User' },
+        { id: 2, label: 'People' },
+        { id: 3, label: 'Ike' },
+        { id: 4, label: 'Tarun' },
+        { id: 5, label: 'Food' },
+        { id: 6, label: 'Pizza' },
     ];
 
     const edges = [
         { from: 1, to: 2 },
+        { from: 1, to: 5 },
         { from: 2, to: 3 },
-        { from: 3, to: 1 },
+        { from: 2, to: 4 },
+        { from: 5, to: 6 },
     ];
 
+    /*
+        data => get()
+        for category in data
+    */
     return (
         <>
             <Head>
