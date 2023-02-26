@@ -1,7 +1,8 @@
 import NodeGraph from '../components/NodeGraph';
 import Head from 'next/head'
 import styles from '@/styles/Graph.module.css'
-import { UserButton } from '@clerk/nextjs'
+import Navbar from '../components/Navbar';
+
 
 
 const HomePage = () => {
@@ -35,7 +36,7 @@ const HomePage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <UserButton/>
+                <Navbar />
                 <NodeGraph nodes={nodes} edges={edges} />
             </main>
         </>

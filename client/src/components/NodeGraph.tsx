@@ -27,13 +27,26 @@ const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
       };
 
       const options = {
+        nodes: {
+          color: '#606C38',
+          size: 20,
+          font: {
+            size: 22,
+            color: '#FFFFFF',
+          },
+        },
         interaction: {
           dragNodes: true,
-          dragView: true,
-          zoomView: true,
+          dragView: false,
+          zoomView: false,
         },
         physics: {
           enabled: true,
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: {
+            springConstant: 0.08,
+            springLength: 100,
+          },
         },
       };
 
