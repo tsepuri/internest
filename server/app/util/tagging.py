@@ -1,21 +1,17 @@
+import os
+
 import spacy
 import openai
-import os
 from dotenv import load_dotenv
-from spacy.vectors import Vectors
 
 load_dotenv()
-#doc = nlp("I played tennis with Ike and John the other day. They were both really nice to me. Yesterday, I watched a movie with Hunter. I did some bench pressing and then did squats all while at the gym. I also bouldered because I'm so cool. That was with Reece and Hunter though. I ate strawberry ice cream at Mitchells. I am so sad now. I ate chocolate ice cream at a different ice cream place because I decided I hate Mitchells now. I played tennis with Ike and John the other day. They were both really nice to me. Yesterday, I watched a movie with Hunter. I did some bench pressing and then did squats all while at the gym. I also bouldered because I'm so cool. That was with Reece and Hunter though. I ate strawberry ice cream at Mitchells. I am so sad now. I ate chocolate ice cream at a different ice cream place because I decided I hate Mitchells now.")
-#deps = [token.dep_ for token in doc]
-#print(deps)
-#chunks = [chunk.text for chunk in doc.noun_chunks]
-#print(chunks)
-#print(doc.ents)
+
+nlp = spacy.load("en_core_web_md")
 
 class Tagging:
     def __init__(self, **kwargs):
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        self.spacy_nlp = spacy.load("en_core_web_lg")
+        self.spacy_nlp = nlp
         self.categories = ["entertainment", "sports", "food", "work", "relationship, location"]
         if "categories" in kwargs:
             self.categories = kwargs["categories"]
@@ -39,13 +35,6 @@ class Tagging:
         print(db_request)
         return db_request
 
-    def word_vectors(self):
-        #empty_vectors = Vectors(shape=(1, 5))
-        #data = numpy.zeros((3, 5), dtype='f')
-        #keys = ["cat", "dog", "rat"]
-        #vectors = Vectors(data=data, keys=keys)
-        return vectors
-
     def _similarity(self, word1, word2):
         return 
         pass
@@ -67,9 +56,5 @@ class Tagging:
     )
 
 tag = Tagging()
-tag.categorize("I played tennis with Ike and John the other day. They were both really nice to me. Yesterday, I watched a movie with Hunter. I did some bench pressing and then did squats all while at the gym. I also bouldered because I'm so cool. That was with Reece and Hunter though. I ate strawberry ice cream at Mitchells. I am so sad now. I ate chocolate ice cream at a different ice cream place because I decided I hate Mitchells now. ")
-tag.keywords("I played tennis with Ike and John the other day. They were both really nice to me. Yesterday, I watched a movie with Hunter. I did some bench pressing and then did squats all while at the gym. I also bouldered because I'm so cool. That was with Reece and Hunter though. I ate strawberry ice cream at Mitchells. I am so sad now. I ate chocolate ice cream at a different ice cream place because I decided I hate Mitchells now. ")
-#tag.word_vectors()
 
 
-        
