@@ -28,7 +28,7 @@ class ElasticsearchClient:
                 "script_score": {
                     "query": {"match_all": {}},
                     "script": {
-                        "source": "dotProduct(params.query_vector, doc['dense_vector'])",
+                        "source": "Math.max(0, dotProduct(params.query_vector, 'dense_vector'))",
                         "params": {
                             "query_vector": query_vector
                         }
@@ -88,7 +88,7 @@ class ElasticsearchClient:
             self.es_server.indices.create(index=self.index_name, body=mapping)
         for i, keyword in enumerate(keywords):
             doc = {
-                "doc_id": "abcde",
+                "doc_id": doc_id,
                 "user_id": user_id,
                 "keyword": keyword,
                 "dense_vector": word_vecs[i]

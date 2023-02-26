@@ -59,7 +59,7 @@ async def register_validated_keywords(request: RegisterValidatedKeywordsRequest)
         "graph" : graph,
         "frequency" : frequency
     }
-
+git
 
 @app.post("/keyword")
 async def create_keyword_docs_in_es():
@@ -71,7 +71,7 @@ async def create_keyword_docs_in_es():
     doc_id = "doc123"
 
     es_client = get_es_client()
-    keywords = ["people", "food", "place", "emotion", "self-improvement"]
+    keywords = ["entertainment", "sports", "food", "work", "relationship", "location"]
     es_client.create_keyword_doc(user_id, doc_id, keywords)
     return None
 
