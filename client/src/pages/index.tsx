@@ -1,11 +1,8 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
 import { UserButton } from '@clerk/nextjs'
-import { useState, MouseEvent, FormEvent } from 'react';
+import Head from 'next/head'
+import styles from '@/styles/Home.module.css'
+import { useState, FormEvent } from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
 
 function JournalEntryForm() {
   const [body, setBody] = useState('');
@@ -25,9 +22,9 @@ function JournalEntryForm() {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.inputWrapper}>
-        <label htmlFor="body">TODO: TODAYS DATE:</label><br />
+        <label htmlFor={styles.body}>TODO: TODAYS DATE:</label><br />
         <textarea
-          id="body"
+          id={styles.body}
           value={body}
           onChange={(event) => setBody(event.target.value)}
         ></textarea>
@@ -46,13 +43,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main className={styles.main}>
-        <div className={styles.description}>
         <UserButton/>
-          <p>
-            Get started by making an entry
-          </p>
-        </div>
+
         <div className={styles.formWrapper}>
             <JournalEntryForm />
           </div>
