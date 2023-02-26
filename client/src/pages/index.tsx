@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar';
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { useState, FormEvent } from 'react';
+import { SignOutButton, UserButton, UserProfile, useAuth } from '@clerk/nextjs'
 
 
 function JournalEntryForm() {
@@ -35,6 +36,11 @@ function JournalEntryForm() {
 }
 
 export default function Home() {
+  const apiCall = async () => {
+    let res = await fetch("/api/hello")
+    console.log(res)
+  }
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
   return (
     <>
       <Head>        
