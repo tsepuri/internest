@@ -1,30 +1,28 @@
 import Link from 'next/link';
+import styles from '@/styles/Navbar.module.css'
 
 const Navbar = () => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link href="/">
-            {/* Remove the <a> tag and use the Link component instead */}
-            <a>Home</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/about">
-            {/* Remove the <a> tag and use the Link component instead */}
-            <a>About</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/contact" passHref>
-            {/* Add the passHref prop to the Link component */}
-            <a>Contact</a>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
+    return (
+        <nav className={styles.nav}>
+            <ul className={styles.ul}>
+                <li className={styles.li}>
+                    <Link href="/">
+                        <a className={styles.a}>Home</a>
+                    </Link>
+                </li>
+                <li className={styles.li}>
+                    <Link href="/about">
+                        <a className={styles.a}>About</a>
+                    </Link>
+                </li>
+                <li className={styles.li}>
+                    <Link href="/contact" as="/contact">
+                        <a className={styles.a}>Contact</a>
+                    </Link>
+                </li>
+            </ul>
+        </nav>
+    );
 };
 
 export default Navbar;
