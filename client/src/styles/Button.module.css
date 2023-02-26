@@ -1,0 +1,25 @@
+/* Button.module.css */
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+
+  }
+  
+  .button {
+    background-color: #283618;
+    color: #fff;
+    padding: 1%;
+    border-radius: 3%;
+    cursor: pointer;
+    margin-right: 2%;
+    margin-top:1%
+  }
+  
+  .button:hover {
+    background-color: #606C38;
+  }
+  
+  .active {
+    background-color: #606C38;
+  }

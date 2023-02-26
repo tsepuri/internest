@@ -2,6 +2,7 @@ import NodeGraph from '../components/NodeGraph';
 import Head from 'next/head'
 import styles from '@/styles/Graph.module.css'
 import Navbar from '../components/Navbar';
+import Button from '../components/Button'
 
 
 
@@ -37,6 +38,10 @@ const HomePage = () => {
             </Head>
             <main className={styles.main}>
                 <Navbar />
+                <h1 className={styles.h1}>
+                    Choose a view:
+                </h1>
+                <Button />
                 <NodeGraph nodes={nodes} edges={edges} />
             </main>
         </>

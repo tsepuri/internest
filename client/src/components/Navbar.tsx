@@ -19,11 +19,6 @@ const Navbar = () => {
                         Graph
                     </Link>
                 </li>
-                <li className={styles.li}>
-                    <Link href="/contact" as="/contact" className={styles.a}>
-                        Journal Entries
-                    </Link>
-                </li>
             </ul>
         </nav>
     );
