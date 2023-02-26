@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 import motor.motor_asyncio
 
-from routers.clerk import getUser
-from db.models import Keyword, User, Journal
+from app.routers.clerk import getUser
+from app.db.models import Keyword, User, Journal
 
 load_dotenv()
 

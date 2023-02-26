@@ -1,11 +1,11 @@
 import uvicorn
 from fastapi import Depends, FastAPI
-from routers.clerk import verifyClerk
-from db.db import DB
-from schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
-from util.tagging import tag
-from es_client import get_es_client
-from routers import clerk, user
+from app.routers.clerk import verifyClerk
+from app.db.db import DB
+from app.schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
+from app.util.tagging import tag
+from app.es_client import get_es_client
+from app.routers import clerk, user
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
@@ -78,13 +78,14 @@ async def register_validated_keywords(request: RegisterValidatedKeywordsRequest)
     # get similar existing keywords recommendation for decide parent node(categorize)
     es_client = get_es_client()
     result = es_client.get_relevant_doc_bulk(keywords, 1)
+    print(result)
 
     # update keywords and update graphmap
     graph = ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5" ]
     frequency = {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
     return {
-        "graph" : graph,
-        "frequency" : frequency
+        "graph": graph,
+        "frequency": frequency
     }
 
 @app.get("/{user_id}/{keyword}")

@@ -1,10 +1,10 @@
 import datetime
 import dataclasses
 from fastapi import APIRouter, HTTPException
-from util.types import Session
-from routers.clerk import verifyClerk
+from app.util.types import Session
+from app.routers.clerk import verifyClerk
 
-from db.db import DB
+from app.db.db import DB
 router = APIRouter(
     prefix="/user",
 )

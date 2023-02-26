@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 from elasticsearch import Elasticsearch
 
-from util.tagging import nlp
+from app.util.tagging import nlp
 
 
 class ElasticsearchClient:

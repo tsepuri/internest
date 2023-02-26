@@ -3,8 +3,8 @@ import requests
 import os
 import json
 from dotenv import load_dotenv
-from db.models import User
-from util.types import InternalUser
+from app.db.models import User
+from app.util.types import InternalUser
 
 load_dotenv()
 router = APIRouter(

@@ -21,75 +21,84 @@ type Edge = {
 };
 
 const Graph = () => {
-    const [graphResponse, setGraphResponse] = useState<GraphResponse>()
-    const { userId, sessionId } = useAuth();
+  const [graphResponse, setGraphResponse] = useState<GraphResponse>()
+  const { userId, sessionId } = useAuth();
+  const [nodes, setNodes] = useState<Node[]>()
+  const [edges, setEdges] = useState<Edge[]>();
+  useEffect(() => {
+    console.log("here")
+    const fetchGraph = async () => {
+      let data = await getGraph({ userId: userId as string }, sessionId as string)
+      data = {
+        graph: [{ "location": { "restaurants": ["Mitchells", "Mia Bella"] }, "Food": {} }],
+        frequency: { "location": 1, "restaurants": 1, "Mitchells": 1, "Mia Bella": 1, "Food": 1 }
+      }
+      console.log(data)
+      setGraphResponse(data)
+      var uniqueIDCounter = 0;
+      var keysArr = Object.keys((data as GraphResponse).frequency);
+      var averageFreq = Object.values((data as GraphResponse).frequency).reduce((a, b) => a + b) / keysArr.length;
+      var i = 0;
 
-    useEffect(() => {
-        const fetchGraph = async () => {
-            const data = await getGraph({userId: userId as string}, sessionId as string)
-            setGraphResponse(data)
-          }
-          fetchGraph()
-          // make sure to catch any error
-          .catch(console.error);
-      }, [])
+      const nodes = keysArr.map((key, i) => {
+        var currentFreq = (data as GraphResponse).frequency[key]
+        var currentSize = 0;
+        var size = 15;
+
+        if (currentFreq > averageFreq) {
+          size = 22;
+        }
+
+        return { id: i, label: key, size: size }
+
+      });
+
+      const userNode = { id: -1, label: "User", size: 20 };
+      nodes.push(userNode);
+      setNodes(nodes)
+      const forest0 = (data as GraphResponse).graph[0]
+
+      function dfs(forest: any, parent: Node, f: { (t: any, p: any): void; (arg0: string, arg1: any): void; }) {
+        if (Array.isArray(forest)) {
+          Object.values(forest).forEach((treeLabel: string) => {
+            var labelId = keysArr.indexOf(treeLabel)
+            const treeNode = { id: keysArr.indexOf(treeLabel), label: treeLabel, size: 0 };
+
+            f(treeNode, parent);
+          })
+        } else if (typeof forest == "object") {
+          Object.keys(forest).forEach((treeLabel: string) => {
+            const treeNode = { id: keysArr.indexOf(treeLabel), label: treeLabel, size: 0 };
+
+            f(treeNode, parent);
+            const children = forest[treeLabel];
+
+            dfs(children, treeNode, f);
+          })
+        }
+      }
+
+      const edges: Edge[] = [];
+
+      dfs(forest0, userNode, (t: any, p: any) => {
+        edges.push({ from: p.id, to: t.id });
+      });
+      setEdges(edges)
+    }
+    fetchGraph()
+      // make sure to catch any error
+      .catch(console.error);
+  }, [])
 
   // let graphResponse:GraphResponse = {
   //   graph: [{"keyword1": {"keyword2": ["keyword3", "keyword4"]}, "keyword5": {}}],
   //   frequency: {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
   // }
 
-  var uniqueIDCounter = 0;
-  var keysArr = Object.keys((graphResponse as GraphResponse).frequency);
-  var averageFreq = Object.values((graphResponse as GraphResponse).frequency).reduce((a, b) => a + b) / keysArr.length;
-  var i = 0;
 
-  const nodes = keysArr.map((key, i) => {
-    var currentFreq = (graphResponse as GraphResponse).frequency[key] 
-    var currentSize = 0;
-    var size = 15;
-
-    if (currentFreq > averageFreq) {
-      size = 22;
-    }
-
-    return { id: i, label: key, size: size }
-
-  });
-
-  const userNode = {id: -1, label: "User", size: 20};
-  nodes.push(userNode);
-
-  const forest0 = (graphResponse as GraphResponse).graph[0]
-
-  function dfs(forest: any, parent: Node, f: { (t: any, p: any): void; (arg0: string, arg1: any): void; }) {
-    if (Array.isArray(forest)) {
-      Object.values(forest).forEach((treeLabel: string) => {
-        var labelId = keysArr.indexOf(treeLabel)
-        const treeNode = { id: keysArr.indexOf(treeLabel), label: treeLabel, size: 0 };
-
-        f(treeNode, parent);
-      })
-    } else if (typeof forest == "object") {
-      Object.keys(forest).forEach((treeLabel: string) => {
-        const treeNode = { id: keysArr.indexOf(treeLabel), label: treeLabel, size: 0 };
-
-        f(treeNode, parent);
-        const children = forest[treeLabel];
-
-        dfs(children, treeNode, f);
-      })
-    }
-  }
-
-  const edges:Edge[] = [];
-
-  dfs(forest0, userNode, (t: any, p: any) => {
-    edges.push({from: p.id, to: t.id});
-  });
 
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
-  
+
   const handleNodeDoubleClick = (nodeId: number) => {
     setSelectedNodeId(nodeId);
   };

@@ -1,5 +1,5 @@
 from typing import List
-from util.types import Session
+from app.util.types import Session
 from pydantic import BaseModel
 
 
