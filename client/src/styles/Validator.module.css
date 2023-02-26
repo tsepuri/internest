@@ -62,3 +62,7 @@
 .submitButton:hover {
   background-color: #444;
 }
+
+#header {
+  margin-top: 1%;
+}

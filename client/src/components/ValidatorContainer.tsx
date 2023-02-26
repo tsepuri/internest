@@ -26,6 +26,9 @@ const ValidatorContainer: React.FC<ValidatorContainerProps> = ({
 
   return (
     <div>
+      <h2 id={styles.header}>
+        Click to remove keywords:
+      </h2>
       <div className={styles.wordContainer}>
         {words.map((word, index) => (
           <div
@@ -39,7 +42,7 @@ const ValidatorContainer: React.FC<ValidatorContainerProps> = ({
         ))}
       </div>
       <button className={styles.submitButton} onClick={handleSubmit}>
-        Submit
+        Add Keywords
       </button>
     </div>
   );
