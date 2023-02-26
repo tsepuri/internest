@@ -1,0 +1,60 @@
+.wordContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wordCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #eee;
+  position: relative;
+  cursor: pointer;
+}
+
+.wordCircle:hover .wordText {
+  color: red;
+}
+
+.wordOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.wordCircle:hover .wordOverlay {
+  opacity: 1;
+}
+
+.wordText {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  z-index: 1;
+  text-align: center;
+}
+
+.submitButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #444;
+}
