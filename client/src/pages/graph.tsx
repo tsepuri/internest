@@ -38,9 +38,9 @@ const HomePage = () => {
             </Head>
             <main className={styles.main}>
                 <Navbar />
-                <h1 className={styles.h1}>
-                    Choose a view:
-                </h1>
+                <h4 className={styles.h1}>
+                    Choose a view
+                </h4>
                 <Button />
                 <NodeGraph nodes={nodes} edges={edges} />
             </main>

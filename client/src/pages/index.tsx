@@ -31,16 +31,18 @@ function JournalEntryForm() {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.inputWrapper}>
-        <div>
-          <label htmlFor={styles.body}>Date Selected:</label><br />
+        <div id={styles.datepicker}>
+          <label className={styles.label} htmlFor={styles.body}>Select Date</label><br />
           <Datepicker onDateChange={handleDateChange} />
         </div>
-
+        <div id={styles.entry}>
+        <label className={styles.label} htmlFor={styles.body}>Journal Entry</label><br />
         <textarea
           id={styles.body}
           value={body}
           onChange={(event) => setBody(event.target.value)}
         ></textarea>
+        </div>
       </div>
       <button type="submit" className={styles.submitButton}>Submit</button>
     </form>

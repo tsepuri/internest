@@ -1,28 +1,27 @@
 .main {
-  display: flex;
-  flex-direction: column;
   padding: 3rem;
   min-height: 100vh;
   background-color:#FEFAE0;
 }
 
 .formWrapper {
-  margin: 0 auto;
-  padding-top: 20px;
+  margin: 5% auto;
+  align-items: center;
+  padding: 20px;
 }
 
+#datepicker {
+  margin-bottom: 10px;
+}
+.entry {
+  margin: 20px;
+}
 #body {
   font-size: 1.5rem;
   width: 50vw;
   height: 30vh;
+  margin: 2% 0%;
+  margin-top: 0;
   /* to make it full width of its container */
 }
 
-.label {
-  font-size: 1.5rem;
-}
-
-.form {
-  width: 100%;
-  margin: auto;
-}
