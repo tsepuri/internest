@@ -1,19 +1,27 @@
+import datetime
+import dataclasses
 from fastapi import APIRouter, HTTPException
+
+from db.db import DB
 router = APIRouter(
     prefix="/user",
 )
 
+@dataclasses.dataclass
+class Entry:
+    entry: str
 
 @router.post("/{user_id}/journal")
-async def create_user_journal(user_id: str, entry: str):
+async def create_user_journal(user_id: str, entry: Entry):
     """
     create new journal in graphmap
     :return:
     """
-    print()
-    pass
-    return {"something": "something"}
+    db = DB()
+    objID = await db.insert_journal_entry(user_id, entry.entry)
+    return {"objectID": objID}
 
+# expected values for time threshold are 1d, 1w or 1m
 @router.get("/{user_id}/graph-map")
 async def get_user_graph_map(user_id: str):
     """

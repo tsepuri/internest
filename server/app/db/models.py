@@ -72,6 +72,7 @@ class Keyword(TimestampedModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user: User
     name: str
+    frequency: int
     parent: Keyword = None
     journals: List[Journal] = Field(default_factory=list)
     children: List[Keyword] = Field(default_factory=list)
