@@ -1,4 +1,6 @@
 import { api } from "./axios";
+import { User }  from "@/types/User";
+import { Journal } from "@/types/Journal"
 
 export async function sendJournalEntry(user:User, journal:Journal) {
     let response = await api.post(`/user/${user.userId}/journal`, {
