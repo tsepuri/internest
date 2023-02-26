@@ -3,27 +3,38 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { UserButton } from '@clerk/nextjs'
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, FormEvent } from 'react';
 
 const inter = Inter({ subsets: ['latin'] })
 
-
 function JournalEntryForm() {
-  const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
-  const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch('/api/journal-entries', {
       method: 'POST',
-      body: JSON.stringify({ title, body }),
+      body: JSON.stringify({ body }),
     });
     if (response.ok) {
-      setTitle('');
       setBody('');
       // Optionally, redirect to a page that shows the newly created journal entry
     }
   };
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.inputWrapper}>
+        <label htmlFor="body">TODO: TODAYS DATE:</label><br />
+        <textarea
+          id="body"
+          value={body}
+          onChange={(event) => setBody(event.target.value)}
+        ></textarea>
+      </div>
+      <button type="submit" className={styles.submitButton}>Submit</button>
+    </form>
+  );
 }
 
 export default function Home() {
@@ -41,15 +52,10 @@ export default function Home() {
           <p>
             Get started by making an entry
           </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-            </a>
-          </div>
         </div>
+        <div className={styles.formWrapper}>
+            <JournalEntryForm />
+          </div>
       </main>
     </>
   )
