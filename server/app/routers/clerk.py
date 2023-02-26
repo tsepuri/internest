@@ -15,10 +15,15 @@ router = APIRouter(
 headers = {"Authorization": f"Bearer {os.getenv('CLERK_SECRET_TOKEN')}"}
 @router.post("/{session_id}/verify")
 async def verifyClerk(session_id:str, token:str, inputUserID:str):
-    res = await requests.post(f"https://api.clerk.dev/v1/sessions/{session_id}/verify", json={
+    res = requests.post(f"https://api.clerk.dev/v1/sessions/{session_id}/verify", json={
         'token': token
     }, headers=headers)
-    return {"verified": res.content.user_id == inputUserID}
+    content = json.loads(res.content)
+    print(content)
+    if 'user_id' in content and content['user_id'] == inputUserID:
+        return True
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
 @router.get("/users/{user_id}")
 async def getUser(user_id:str):

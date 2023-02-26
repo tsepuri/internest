@@ -4,14 +4,24 @@ from fastapi import Depends, FastAPI
 from app.schemas.requests import ParseUserJournalRequest
 from app.util.tagging import tag
 from es_client import get_es_client
-from dependencies import get_token_header
 from routers import clerk, user
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(dependencies=[Depends(get_token_header)])
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
 
 
+app = FastAPI()
 app.include_router(clerk.router)
 app.include_router(user.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"])
 
 @app.get("/")
 async def root():

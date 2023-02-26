@@ -18,7 +18,7 @@ function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (body: string, date:
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate});
+    const response = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate}, sessionId as string);
     setBody(''); 
     setSelectedDate(new Date());
     console.log(response)
