@@ -27,10 +27,18 @@ const NodeGraph = ({ nodes = [], edges = [] }: Props) => {
       };
 
       const options = {
+        nodes: {
+          color: '#606C38',
+          size: 20,
+          font: {
+            size: 22,
+            color: '#FFFFFF',
+          },
+        },
         interaction: {
           dragNodes: true,
           dragView: false,
-          zoomView: true,
+          zoomView: false,
         },
         physics: {
           enabled: true,
