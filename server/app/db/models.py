@@ -2,12 +2,20 @@ from datetime import datetime
 from typing import ForwardRef, List
 
 from bson import ObjectId
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, root_validator
 
 
 class TimestampedModel(BaseModel):
-    createdAt: datetime
-    updatedAt: datetime
+    createdAt: datetime = datetime.now()
+    updatedAt: datetime = datetime.now()
+
+    class Config:
+        validate_assignment = True
+
+    @root_validator
+    def number_validator(cls, values):
+        values["updatedAt"] = datetime.now()
+        return values
 
 def test():
     pass
@@ -76,6 +84,7 @@ class Keyword(TimestampedModel):
     parent: Keyword = None
     children: List[Keyword] = Field(default_factory=list)
     journals: List[Journal] = Field(default_factory=list)
+    mentions: List[datetime] = Field(default_factory=list)
 
     schema_extra = {
         "exampleKeyword": {
@@ -83,7 +92,8 @@ class Keyword(TimestampedModel):
             "frequency": 2,
             "parent": "place",
             "journals": ["4309320"],
-            "children": ["Chipotle", "BIBIBOP"]
+            "children": ["Chipotle", "BIBIBOP"],
+            "mentions": ["2022-11-12", "2023-01-06"]
         }
     }
 

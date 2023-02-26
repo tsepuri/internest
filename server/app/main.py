@@ -1,5 +1,8 @@
 import uvicorn
 from fastapi import Depends, FastAPI
+
+from app.schemas.requests import ParseUserJournalRequest
+from app.util.tagging import tag
 from es_client import get_es_client
 from dependencies import get_token_header
 from routers import clerk, user
@@ -26,17 +29,17 @@ async def get_user_graph_map():
 
 
 @app.post("/parse-journal")
-async def parse_user_journal():
+async def parse_user_journal(request: ParseUserJournalRequest):
     """
     parse user input journal and create journal document.
     extract main keywords in journal and return them to client for user validation.
     :return:
     """
-    pass
-    # user auth
-    # db.insert_journal_entry
+    # user auth(skip)
+    user_id, journal_content = request.userId, request.content
     # openai model extracts keyword from journal
-    return {"extractedKeywords": ["keyword1", "keywordA", "keyword3", "keyword4", "keyword5"]}
+    result = tag.keywords(journal_content)
+    return {"extractedKeywords": result.get("keywords")}
 
 
 @app.post("/validated-keywords")
@@ -46,7 +49,7 @@ async def register_validated_keywords():
     # create keyword docs in es
     # get similar existing keywords recommendation for decide parent node(categorize)
     # update keywords and update graphmap
-    graph = ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5"]
+    graph = ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5" ]
     frequency = {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
     return {
         "graph" : graph,

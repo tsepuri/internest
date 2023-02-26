@@ -28,7 +28,8 @@ class Tagging:
         return db_request 
     
     def keywords(self, text):
-        relations = self.openai_keyword_response(text).strip().split(":")[1].strip()
+        openai_result = self.openai_keyword_response(text)
+        relations = openai_result.strip()
         db_request = {
             "keywords": [word.strip() for word in relations.split(", ") if len(word) > 0]
         }
@@ -36,11 +37,11 @@ class Tagging:
         return db_request
 
     def _similarity(self, word1, word2):
-        return 
+        return
         pass
-    
+
     def openai_keyword_response(self, text):
-        return self.response(f"Extract keywords from the text\ntext: {text}").choices[0].text
+        return self.response(f"Extract keywords from the text and output in one line seperated by commas\ntext: {text}").choices[0].text
     
     def openai_category_response(self, text):
         return self.response(f"Extract keywords from the text and tag them with the labels of categories. Put each keyword into categories\ncategory : [{','.join(self.categories)}]\ntext: {text}").choices[0].text
@@ -56,5 +57,3 @@ class Tagging:
     )
 
 tag = Tagging()
-
-

@@ -55,7 +55,8 @@ class DB():
             'name': name,
             'frequency': 1,
             'parent': parent,
-            'journals': [journal]
+            'journals': [journal],
+            'mentions': [journal.createdAt]
         })
         return result.inserted_id
     
@@ -66,15 +67,18 @@ class DB():
                 'frequency': keywordObj.frequency,
                 'journals': keywordObj.journals,
                 'children': keywordObj.children,
+                'mentions': keywordObj.mentions,
             }
         )
         return result.updated_id
 
     
     async def get_graph(self, user_id=str, time_threshold=datetime):
-        result = await self.db.User.find({'_id': user_id})
+        user = await self.db.User.find({'_id': user_id})
+        filter = {"mentions": {"$gte": time_threshold}}
+        keywords = await self.db.Keyword.find_all(filter)
         # we have to join graph column with time filter
-        return result['graph']
+        return user['graph']
 
 
         
