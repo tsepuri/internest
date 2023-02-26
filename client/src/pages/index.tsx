@@ -23,8 +23,8 @@ function JournalEntryForm({ onFormSubmit }: { onFormSubmit: (keywords: string[])
     const response:JournalResponse = await sendJournalEntry({userId: userId as string}, {entry: body, date: selectedDate}, sessionId as string);
     setBody(''); 
     setSelectedDate(new Date());
-    if (response.keywords) {
-      onFormSubmit(response.keywords)
+    if (response.extractedKeywords) {
+      onFormSubmit(response.extractedKeywords)
     }
     else {
       onFormSubmit(["Pizza", "Food", "Ice Cream"])

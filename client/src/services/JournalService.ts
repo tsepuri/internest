@@ -4,9 +4,10 @@ import { Journal } from "@/types/Journal"
 import { makeSessionInfo } from "./clerk";
  
 export async function sendJournalEntry(user:User, journal:Journal, sessionToken:string) {
-    let response = await api.post(`/user/${user.userId}/journal`, {
-        entry: journal.entry, date: journal.date.toISOString(), session: makeSessionInfo(sessionToken)
+    let response = await api.post(`/parse-journal`, {
+        userId: user.userId, entry: journal.entry, date: journal.date.toISOString(), session: makeSessionInfo(sessionToken)
     })
+    console.log(response.data)
     return response.data
 }
 

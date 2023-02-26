@@ -4,5 +4,5 @@ export interface Journal {
 }
 
 export interface JournalResponse {
-    keywords: string[]
+    extractedKeywords: string[]
 }

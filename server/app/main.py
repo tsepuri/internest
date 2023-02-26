@@ -1,8 +1,9 @@
 import uvicorn
 from fastapi import Depends, FastAPI
-
-from app.schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
-from app.util.tagging import tag
+from routers.clerk import verifyClerk
+from db.db import DB
+from schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
+from util.tagging import tag
 from es_client import get_es_client
 from routers import clerk, user
 from fastapi.middleware.cors import CORSMiddleware
@@ -59,8 +60,12 @@ async def parse_user_journal(request: ParseUserJournalRequest):
     :return:
     """
     # user auth(skip)
-    user_id, journal_content = request.userId, request.content
+    print(request)
+    user_id, journal_content = request.userId, request.entry
+    await verifyClerk(request.session.sessionId, request.session.sessionToken, user_id)
     # openai model extracts keyword from journal
+    db = DB()
+    objID = await db.insert_journal_entry(user_id, journal_content)
     result = tag.keywords(journal_content)
     return {"extractedKeywords": result.get("keywords")}
 

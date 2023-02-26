@@ -29,6 +29,9 @@ const Graph = () => {
             const data = await getGraph({userId: userId as string}, sessionId as string)
             setGraphResponse(data)
           }
+          fetchGraph()
+          // make sure to catch any error
+          .catch(console.error);
       }, [])
 
   // let graphResponse:GraphResponse = {
