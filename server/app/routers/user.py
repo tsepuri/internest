@@ -18,6 +18,7 @@ async def create_user_journal(user_id: str, entry: Entry):
     :return:
     """
     db = DB()
+    print(entry.entry)
     objID = await db.insert_journal_entry(user_id, entry.entry)
     # extract keywords
     # ask es server keyword
