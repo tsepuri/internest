@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import Depends, FastAPI
 
-from app.schemas.requests import ParseUserJournalRequest
+from app.schemas.requests import ParseUserJournalRequest, RegisterValidatedKeywordsRequest
 from app.util.tagging import tag
 from es_client import get_es_client
 from routers import clerk, user
@@ -35,7 +35,20 @@ async def get_user_graph_map():
     :return:
     """
 
-    return {"graph": ["people", {"place" : ["OSU", "Cincinaty"]},  "food", ""]}
+    return {
+        "graph": [
+            {"relationship": []},
+            {"location" : ["OSU", "Cincinnati"]},
+            {"food": []}
+        ],
+        "frequency": {
+            "relationship" : 3,
+            "location": 5,
+            "OSU": 1,
+            "Cincinnati": 2,
+            "food": 3
+        }
+    }
 
 
 @app.post("/parse-journal")
@@ -53,11 +66,14 @@ async def parse_user_journal(request: ParseUserJournalRequest):
 
 
 @app.post("/validated-keywords")
-async def register_validated_keywords():
-    pass
-    # user auth
-    # create keyword docs in es
+async def register_validated_keywords(request: RegisterValidatedKeywordsRequest):
+    # user auth (skip)
+    user_id, keywords = request.userId, request.keywords
+
     # get similar existing keywords recommendation for decide parent node(categorize)
+    es_client = get_es_client()
+    result = es_client.get_relevant_doc_bulk(keywords, 1)
+
     # update keywords and update graphmap
     graph = ["keyword1", {"keyword2": ["keyword3", "keyword4"]}, "keyword5" ]
     frequency = {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
@@ -65,7 +81,6 @@ async def register_validated_keywords():
         "graph" : graph,
         "frequency" : frequency
     }
-
 
 @app.post("/keyword")
 async def create_keyword_docs_in_es():
@@ -77,7 +92,7 @@ async def create_keyword_docs_in_es():
     doc_id = "doc123"
 
     es_client = get_es_client()
-    keywords = ["people", "food", "place", "emotion", "self-improvement"]
+    keywords = ["entertainment", "sports", "food", "work", "relationship", "location"]
     es_client.create_keyword_doc(user_id, doc_id, keywords)
     return None
 
