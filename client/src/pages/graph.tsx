@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Button from '../components/Button';
 import JournalModal from '../components/JournalModal';
 import { useState } from 'react';
+import { GraphResponse } from '@/types/GraphType';
 
 type Node = {
   id: number;
@@ -17,6 +18,10 @@ type Edge = {
 };
 
 const Graph = () => {
+  let graphResponse:GraphResponse = {
+    graph: [{"keyword1": {"keyword2": ["keyword3", "keyword4"]}, "keyword5": {}}],
+    frequency: {"keyword1": 3, "keyword2": 1, "keyword3": 5, "keyword4": 1, "keyword5": 1}
+  }
   const nodes: Node[] = [
     { id: 1, label: 'User' },
     { id: 2, label: 'People' },

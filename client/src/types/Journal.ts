@@ -1,4 +1,4 @@
-interface Journal {
+export interface Journal {
     date: Date,
     entry: string
 }
