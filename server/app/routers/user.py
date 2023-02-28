@@ -21,7 +21,7 @@ async def create_user_journal(user_id: str, entry: Entry):
     :return:
     """
     print(entry)
-    await verifyClerk(entry.session.sessionId, entry.session.sessionToken, user_id)
+    #await verifyClerk(entry.session.sessionId, entry.session.sessionToken, user_id)
     db = DB()
     print(entry.entry)
     objID = await db.insert_journal_entry(user_id, entry.entry)
